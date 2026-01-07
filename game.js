@@ -3,7 +3,7 @@ const player = {
     location: "Neon Alley",
     inventory: [],
     memories: {},
-    MoraleScore: 0,
+    morale: 0,                // renamed from moralScore
     identityStability: 5
 };
 
@@ -61,8 +61,14 @@ function clearScreen() {
     choicesDiv.innerHTML = "";
 }
 
-function adjustIdentity(amount) { player.identityStability = Math.max(0, Math.min(10, player.identityStability + amount)); }
-function adjustMorale(amount) { player.MoraleScore += amount; }e
+function adjustIdentity(amount) { 
+    player.identityStability = Math.max(0, Math.min(10, player.identityStability + amount)); 
+}
+
+function adjustMorale(amount) { 
+    if (typeof amount !== "number") amount = 0;  // safety
+    player.morale += amount; 
+}
 
 function pickup(item) {
     if (!player.inventory.includes(item)) {
@@ -75,7 +81,9 @@ function pickup(item) {
     }
 }
 
-function updateStatus() { statusDiv.innerText = `Identity: ${player.identityStability} | Morale: ${player.MoraleScore}`; }
+function updateStatus() { 
+    statusDiv.innerText = `Identity: ${player.identityStability} | Morale: ${player.morale}`;
+}
 
 // ------------------- Typewriter -------------------
 function typeWriter(text, speed = 25, callback) {
@@ -128,7 +136,7 @@ function droneEncounter() {
         const destroyBtn = document.createElement("button");
         destroyBtn.innerText = "Destroy Drone";
         destroyBtn.onclick = () => {
-            typeWriter("Sparks fly and metal screams. Morale score decreases.", 25, () => {
+            typeWriter("Sparks fly and metal screams. Morale decreases.", 25, () => {
                 adjustMorale(-1);
                 createContinueButton("Return to Neon Alley", "Neon Alley");
             });
@@ -195,11 +203,11 @@ function ending() {
     clearScreen();
     let endText = "The neon rain reflects your choices.";
     if (player.identityStability <= 0) endText += "\nYour mind collapses. Baseline failed. Darkness wins.";
-    else if (player.MoraleScore >= 3) endText += "\nYou preserved Morality. Memories intact. Identity stable.";
-    else if (player.MoraleScore <= -3) endText += "\nMorale drift consumes you. Memories corrupted. Fade into neon shadow.";
+    else if (player.morale >= 3) endText += "\nYou preserved morale. Memories intact. Identity stable.";
+    else if (player.morale <= -3) endText += "\nMorale drift consumes you. Memories corrupted. Fade into neon shadow.";
     else if (player.inventory.includes("Tyrell Note") && player.inventory.includes("Neon Locket") && player.inventory.includes("Hidden Memory"))
-        endText += "\nSecret Ending: You uncover the lost memories of Rachael Tyrell herself. Neon rain bathes your identity. Truth transcends Morality.";
-    else endText += "\nAmbiguous path. Neon flickers. Identity and Morality in balance.";
+        endText += "\nSecret Ending: You uncover the lost memories of Rachael Tyrell herself. Neon rain bathes your identity. Truth transcends morality.";
+    else endText += "\nAmbiguous path. Neon flickers. Identity and morale in balance.";
 
     typeWriter(endText, 25);
     choicesDiv.innerHTML = "";
