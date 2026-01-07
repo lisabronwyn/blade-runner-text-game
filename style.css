@@ -28,7 +28,7 @@ h1 {
 }
 
 .output {
-  min-height: 300px;
+  min-height: 350px;
   line-height: 1.6em;
   font-size: 1.1em;
   color: #00ffcc;
@@ -70,7 +70,6 @@ button:hover {
   letter-spacing: 1px;
 }
 
-/* Neon flicker effect */
 @keyframes neonGlow {
   0% { text-shadow: 0 0 2px #00ffcc, 0 0 4px #ff00ff; }
   50% { text-shadow: 0 0 6px #00ffcc, 0 0 10px #ff00ff; }
