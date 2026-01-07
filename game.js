@@ -3,7 +3,7 @@ const player = {
     location: "Neon Alley",
     inventory: [],
     memories: {},
-    moralScore: 0,
+    moraleScore: 0,
     identityStability: 5
 };
 
