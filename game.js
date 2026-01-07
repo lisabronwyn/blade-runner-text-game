@@ -13,52 +13,46 @@ const locations = {
         text: "Rain slicks the pavement. Neon kanji reflects in puddles. Shadows move unseen.",
         choices: {
             "Enter the Noodle Bar": "Noodle Bar",
-            "Inspect the drone": "Drone Encounter",
+            "Inspect the Drone": "Drone Encounter",
             "Walk to Offworld Alley": "Offworld Alley"
         }
     },
     "Noodle Bar": {
         text: "Steam fogs the windows. The cook avoids your gaze.",
         choices: {
-            "Ask about the red dream": "Memory Trigger",
+            "Ask about the Red Dream": "Memory Trigger",
             "Leave quietly": "Neon Alley"
         }
     },
-    "Drone Encounter": {
-        text: "",
-        choices: {}
-    },
-    "Memory Trigger": {
-        text: "",
-        choices: {}
-    },
+    "Drone Encounter": { text: "", choices: {} },
+    "Memory Trigger": { text: "", choices: {} },
     "Offworld Alley": {
         text: "Empty and silent. Flickering holo-ads show fragmented memories.",
         choices: {
-            "Investigate the hologram": "HoloMemory",
+            "Investigate the Hologram": "HoloMemory",
             "Return to Neon Alley": "Neon Alley",
             "Enter Corporate HQ": "Corporate HQ"
         }
     },
-    "HoloMemory": {
-        text: "",
-        choices: {}
-    },
+    "HoloMemory": { text: "", choices: {} },
     "Corporate HQ": {
         text: "Towering glass walls reflect neon rain. Drones patrol silently.",
         choices: {
-            "Sneak into server room": "Server Room",
+            "Sneak into Server Room": "Server Room",
             "Confront the Replicant": "Confront Replicant",
             "Return to Offworld Alley": "Offworld Alley"
         }
     },
-    "Server Room": {
-        text: "",
-        choices: {}
+    "Server Room": { text: "", choices: {} },
+    "Confront Replicant": { text: "", choices: {} },
+    // Secret collectibles
+    "Tyrell Note": {
+        text: "A handwritten note from Tyrell Corporation: 'Truth is a luxury.'",
+        choices: { "Return to Noodle Bar": "Noodle Bar" }
     },
-    "Confront Replicant": {
-        text: "",
-        choices: {}
+    "Neon Locket": {
+        text: "A small locket flickers neon pink. Memories trapped inside.",
+        choices: { "Return to Offworld Alley": "Offworld Alley" }
     }
 };
 
@@ -85,6 +79,7 @@ function pickup(item) {
     if (!player.inventory.includes(item)) {
         player.inventory.push(item);
         output.innerHTML += `<p class="pickup">Collected: ${item}</p>`;
+        updateStatus();
     }
 }
 
@@ -92,7 +87,19 @@ function updateStatus() {
     statusDiv.innerText = `Identity: ${player.identityStability} | Moral: ${player.moralScore}`;
 }
 
-// ------------------- Events -------------------
+// ------------------- Secret paths -------------------
+function checkSecretPaths(location) {
+    const secrets = [];
+    if (location === "Noodle Bar" && player.memories.redDream && !player.inventory.includes("Tyrell Note")) {
+        secrets.push({ text: "Read the hidden note behind the menu", dest: "Tyrell Note" });
+    }
+    if (location === "Offworld Alley" && player.inventory.includes("Hidden Memory") && !player.inventory.includes("Neon Locket")) {
+        secrets.push({ text: "Find the Neon Locket in the puddle", dest: "Neon Locket" });
+    }
+    return secrets;
+}
+
+// ------------------- Event Functions -------------------
 function droneEncounter() {
     clearScreen();
     output.innerHTML += "<p>The drone hums, hesitating. Its lens scans your soul.</p>";
@@ -104,7 +111,6 @@ function droneEncounter() {
         player.memories.droneHack = true;
         adjustIdentity(-1);
         pickup("Encrypted File");
-        updateStatus();
         setTimeout(() => showLocation("Neon Alley"), 500);
     };
     choicesDiv.appendChild(hackBtn);
@@ -114,7 +120,6 @@ function droneEncounter() {
     destroyBtn.onclick = () => {
         output.innerHTML += "<p>Sparks fly. Moral score decreases.</p>";
         adjustMoral(-1);
-        updateStatus();
         setTimeout(() => showLocation("Neon Alley"), 500);
     };
     choicesDiv.appendChild(destroyBtn);
@@ -126,7 +131,6 @@ function memoryTrigger() {
     player.memories.redDream = true;
     adjustIdentity(-1);
     pickup("Red Dream Fragment");
-    updateStatus();
 
     const continueBtn = document.createElement("button");
     continueBtn.innerText = "Return";
@@ -142,10 +146,8 @@ function holoMemory() {
     interveneBtn.innerText = "Intervene";
     interveneBtn.onclick = () => {
         output.innerHTML += "<p>You alter the memory. Moral rises, identity falters.</p>";
-        adjustMoral(1);
-        adjustIdentity(-1);
+        adjustMoral(1); adjustIdentity(-1);
         pickup("Altered Holo Memory");
-        updateStatus();
         setTimeout(() => showLocation("Offworld Alley"), 500);
     };
     choicesDiv.appendChild(interveneBtn);
@@ -155,7 +157,6 @@ function holoMemory() {
     watchBtn.onclick = () => {
         output.innerHTML += "<p>You watch. Moral drifts down.</p>";
         adjustMoral(-1);
-        updateStatus();
         setTimeout(() => showLocation("Offworld Alley"), 500);
     };
     choicesDiv.appendChild(watchBtn);
@@ -164,10 +165,8 @@ function holoMemory() {
 function serverRoom() {
     clearScreen();
     output.innerHTML += "<p>You infiltrate the server room. Data flashes.</p>";
-    adjustMoral(1);
-    adjustIdentity(-1);
+    adjustMoral(1); adjustIdentity(-1);
     pickup("Offworld Data Key");
-    updateStatus();
 
     const exitBtn = document.createElement("button");
     exitBtn.innerText = "Exit HQ";
@@ -178,9 +177,7 @@ function serverRoom() {
 function confrontReplicant() {
     clearScreen();
     output.innerHTML += "<p>Replicant confronts you. Baseline test begins.</p>";
-    adjustMoral(1);
-    adjustIdentity(-2);
-    updateStatus();
+    adjustMoral(1); adjustIdentity(-2);
 
     const finishBtn = document.createElement("button");
     finishBtn.innerText = "Finish Encounter";
@@ -188,7 +185,7 @@ function confrontReplicant() {
     choicesDiv.appendChild(finishBtn);
 }
 
-// ------------------- Endings -------------------
+// ------------------- Ending Function -------------------
 function ending() {
     clearScreen();
     let endText = "<p>The neon rain reflects your choices.</p>";
@@ -199,8 +196,8 @@ function ending() {
         endText += "<p>You preserved morality. Memories intact. Identity stable.</p>";
     } else if (player.moralScore <= -3) {
         endText += "<p>Moral drift consumes you. Memories corrupted. Fade into neon shadow.</p>";
-    } else if (player.inventory.includes("Hidden Memory")) {
-        endText += "<p>Secret memories guide you. You uncover truths others forget.</p>";
+    } else if (player.inventory.includes("Tyrell Note") && player.inventory.includes("Neon Locket") && player.inventory.includes("Hidden Memory")) {
+        endText += "<p style='color:#ff77ff;'>Secret Ending: You uncover the lost memories of Rachael Tyrell herself. Neon rain bathes your identity. Truth transcends morality.</p>";
     } else {
         endText += "<p>Ambiguous path. Neon flickers. Identity and morality in balance.</p>";
     }
@@ -219,31 +216,46 @@ function showLocation(location) {
     clearScreen();
 
     let text = loc.text;
-    // Secret memory path
+
+    // Secret memory path trigger
     if (location === "Offworld Alley" && player.memories.redDream && !player.inventory.includes("Hidden Memory")) {
-        text += "<p>A hidden memory flickers, only visible to you.</p>";
+        text += "<p style='color:#ff00ff;'>A hidden memory flickers, only visible to you.</p>";
         pickup("Hidden Memory");
     }
 
     output.innerHTML += `<p>${text}</p>`;
 
+    // Render normal choices
     for (const [label, dest] of Object.entries(loc.choices)) {
         const btn = document.createElement("button");
         btn.innerText = label;
-        btn.onclick = () => {
-            switch(dest) {
-                case "Drone Encounter": droneEncounter(); break;
-                case "Memory Trigger": memoryTrigger(); break;
-                case "HoloMemory": holoMemory(); break;
-                case "Server Room": serverRoom(); break;
-                case "Confront Replicant": confrontReplicant(); break;
-                default: showLocation(dest); break;
-            }
-        };
+        btn.onclick = () => handleChoice(dest);
         choicesDiv.appendChild(btn);
     }
 
+    // Render secret choices
+    const secretChoices = checkSecretPaths(location);
+    secretChoices.forEach(secret => {
+        const btn = document.createElement("button");
+        btn.innerText = secret.text;
+        btn.style.background = "#ff00ff";
+        btn.style.color = "#000";
+        btn.onclick = () => handleChoice(secret.dest);
+        choicesDiv.appendChild(btn);
+    });
+
     updateStatus();
+}
+
+function handleChoice(dest) {
+    switch(dest) {
+        case "Drone Encounter": droneEncounter(); break;
+        case "Memory Trigger": memoryTrigger(); break;
+        case "HoloMemory": holoMemory(); break;
+        case "Server Room": serverRoom(); break;
+        case "Confront Replicant": confrontReplicant(); break;
+        default: showLocation(dest); break;
+    }
 }
 
 // ------------------- Start Game -------------------
