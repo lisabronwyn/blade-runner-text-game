@@ -86,7 +86,7 @@ function updateStatus() {
 }
 
 // ------------------- Typewriter -------------------
-function typeWriter(text, speed = 25, callback) {
+function typeWriter(text, speed = 40, callback) {
     let i = 0;
     const paragraph = document.createElement("p");
     output.appendChild(paragraph);
