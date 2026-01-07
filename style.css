@@ -1,27 +1,24 @@
-body {
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
     background-color: #000;
     color: #0ff;
     font-family: 'Courier New', monospace;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    min-height: 100vh;
-    align-items: flex-start;
+    display: block; /* Safari mobile fix */
 }
 
 #game-container {
-    width: 95%;             /* flexible width for mobile */
-    max-width: 600px;       /* keeps it readable on desktop */
-    margin: 40px auto 20px auto;
+    width: 95%;
+    max-width: 600px;
+    margin: 20px auto;
     padding: 15px;
     background-color: #000;
     border-radius: 10px;
     box-shadow: 0 0 15px #0ff33c;
     box-sizing: border-box;
-    overflow-y: auto;           /* scroll if text exceeds height */
-    -webkit-overflow-scrolling: touch; /* smooth scrolling on iOS */
-    max-height: 95vh;           /* keeps container inside screen */
+    overflow-y: auto;
+    max-height: 90vh; /* prevents content from disappearing on Safari */
 }
 
 #output {
@@ -30,7 +27,7 @@ body {
     white-space: pre-wrap;
     line-height: 1.6em;
     margin-bottom: 20px;
-    font-size: 1.05em;          /* slightly bigger for mobile readability */
+    font-size: 1.05em;
 }
 
 button {
@@ -44,8 +41,7 @@ button {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    text-align: center;
-    min-height: 44px;            /* ensures buttons are tappable on mobile */
+    min-height: 44px; /* mobile tappable */
 }
 
 button:hover {
