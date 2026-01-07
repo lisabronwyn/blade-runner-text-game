@@ -23,7 +23,7 @@ body {
 #output {
     overflow-wrap: break-word;
     word-wrap: break-word;
-    white-space: pre-wrap; /* preserves spaces and line breaks */
+    white-space: pre-wrap;
     line-height: 1.6em;
     margin-bottom: 20px;
 }
