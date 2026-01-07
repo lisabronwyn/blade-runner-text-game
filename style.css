@@ -70,6 +70,11 @@ button:hover {
   letter-spacing: 1px;
 }
 
+.pickup {
+  font-weight: bold;
+  color: #ff77ff;
+}
+
 @keyframes neonGlow {
   0% { text-shadow: 0 0 2px #00ffcc, 0 0 4px #ff00ff; }
   50% { text-shadow: 0 0 6px #00ffcc, 0 0 10px #ff00ff; }
