@@ -1,93 +1,103 @@
-/* ---------------------- Body & Background ---------------------- */
-html, body {
-    height: 100%;
+/* ---------------------- Reset ---------------------- */
+* {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: 'Courier New', monospace;
-    display: block; /* fix mobile Safari flex issue */
-    overflow: hidden;
-    background: #000; /* fallback if image missing */
-    color: #0ff;
 }
 
-/* Full-screen background with blur */
-body::before {
-    content: "";
+/* ---------------------- Body & Background ---------------------- */
+html, body {
+    min-height: 100%;
+    font-family: 'Share Tech Mono', monospace; /* elegant cyberpunk */
+    font-size: 1rem;
+    line-height: 1.6;
+    background: black;
+    color: #0ff;
+    overflow: auto; /* mobile scroll */
+}
+
+/* Background image layer */
+#background {
     position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: url('blade-runner-bg.jpg') no-repeat center center;
-    background-size: cover;
-    filter: blur(3px) brightness(0.6); /* adjust blur/brightness */
-    z-index: -1; /* must stay behind */
+    inset: 0;
+    background: url("blade-runner-bg.jpg") center / cover no-repeat;
+    filter: blur(3px) brightness(0.6);
+    z-index: 0;
+    pointer-events: none; /* allow clicks on container */
 }
 
 /* ---------------------- Game Container ---------------------- */
 #game-container {
-    position: relative;   /* required for z-index */
-    z-index: 1;           /* ensures buttons are clickable above background */
+    position: relative;
+    z-index: 1; /* above background */
     width: 95%;
     max-width: 600px;
     margin: 20px auto;
-    padding: 15px;
-    background-color: rgba(0, 0, 0, 0.65); /* semi-transparent box */
+    padding: 16px;
+    background: rgba(0, 0, 0, 0.65);
     border-radius: 10px;
     box-shadow: 0 0 20px #0ff;
     overflow-y: auto;
     max-height: 90vh;
-    box-sizing: border-box;
-    animation: flicker 2s infinite; /* subtle neon flicker */
+    animation: neon-flicker 2s infinite;
 }
 
 /* ---------------------- Output Text ---------------------- */
 #output {
-    overflow-wrap: break-word;
-    word-wrap: break-word;
     white-space: pre-wrap;
-    line-height: 1.6em;
-    margin-bottom: 20px;
-    font-size: 1.05em;
+    word-break: break-word;
+    margin-bottom: 16px;
 }
 
 #output p {
-    text-shadow: 0 0 6px #0ff; /* neon glow for paragraphs */
+    text-shadow: 0 0 4px #0ff, 0 0 8px #0ff; /* neon glow */
+    letter-spacing: 0.5px;
+    font-size: 1.05rem;
 }
 
 /* ---------------------- Pickup Items ---------------------- */
 .pickup {
     color: #ff0;
     font-weight: bold;
-    text-shadow: 0 0 12px #ff0; /* stronger glow for collectibles */
+    text-shadow: 0 0 8px #ff0, 0 0 12px #ff0;
+    letter-spacing: 1px;
+    margin: 8px 0;
 }
 
 /* ---------------------- Buttons ---------------------- */
 button {
-    display: block;
-    width: 100%;
-    margin: 5px 0;
-    padding: 12px;
-    font-size: 1em;
-    background-color: rgba(0, 255, 255, 0.8);
+    font-family: 'Share Tech Mono', monospace;
+    font-weight: bold;
+    font-size: 1rem;
+    background: rgba(0, 255, 255, 0.85);
     color: #000;
-    border-radius: 6px;
     border: 1px solid #0ff;
-    cursor: pointer;
+    border-radius: 6px;
     text-shadow: 0 0 3px #0ff;
-    min-height: 44px; /* tappable on mobile */
+    margin: 6px 0;
+    padding: 14px;
+    width: 100%;
+    min-height: 44px; /* mobile tappable */
+    cursor: pointer;
+    transition: 0.2s all ease;
 }
 
 button:hover {
-    box-shadow: 0 0 20px #0ff;
+    box-shadow: 0 0 15px #0ff, 0 0 25px #0ff;
+    transform: translateY(-1px);
 }
 
 /* ---------------------- Status Bar ---------------------- */
 #status {
-    margin-top: 10px;
-    font-size: 0.95em;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.95rem;
     color: #0ff;
+    text-shadow: 0 0 3px #0ff;
+    margin-top: 12px;
 }
 
 /* ---------------------- Flicker Animation ---------------------- */
-@keyframes flicker {
+@keyframes neon-flicker {
     0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
     20%, 22%, 24%, 55% { opacity: 0.85; }
 }
