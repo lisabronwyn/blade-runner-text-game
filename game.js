@@ -10,7 +10,7 @@ const player = {
 // ------------------- Locations -------------------
 const locations = {
     "Neon Alley": {
-        text: "Rain slicks the pavement. Neon kanji reflects in puddles. Shadows move unseen.",
+        text: "Rain slicks the pavement. Neon kanji reflects in puddles. Shadows move unseen along the alley walls.",
         choices: {
             "Enter the Noodle Bar": "Noodle Bar",
             "Inspect the Drone": "Drone Encounter",
@@ -18,7 +18,7 @@ const locations = {
         }
     },
     "Noodle Bar": {
-        text: "Steam fogs the windows. The cook avoids your gaze.",
+        text: "Steam curls from the noodle pots, fogging the windows. The cook avoids your gaze, knife clattering softly.",
         choices: {
             "Ask about the Red Dream": "Memory Trigger",
             "Leave quietly": "Neon Alley"
@@ -27,7 +27,7 @@ const locations = {
     "Drone Encounter": { text: "", choices: {} },
     "Memory Trigger": { text: "", choices: {} },
     "Offworld Alley": {
-        text: "Empty and silent. Flickering holo-ads show fragmented memories.",
+        text: "The alley is empty, silent except for the hum of flickering holo-ads. Fragments of memories shimmer across the wet walls.",
         choices: {
             "Investigate the Hologram": "HoloMemory",
             "Return to Neon Alley": "Neon Alley",
@@ -36,7 +36,7 @@ const locations = {
     },
     "HoloMemory": { text: "", choices: {} },
     "Corporate HQ": {
-        text: "Towering glass walls reflect neon rain. Drones patrol silently.",
+        text: "Towering glass walls reflect the neon rain. Drones patrol silently, lenses scanning for anomalies.",
         choices: {
             "Sneak into Server Room": "Server Room",
             "Confront the Replicant": "Confront Replicant",
@@ -46,11 +46,11 @@ const locations = {
     "Server Room": { text: "", choices: {} },
     "Confront Replicant": { text: "", choices: {} },
     "Tyrell Note": {
-        text: "A handwritten note from Tyrell Corporation: 'Truth is a luxury.'",
+        text: "A handwritten note from Tyrell Corporation lies folded: 'Truth is a luxury, and memories are fragile.'",
         choices: { "Return to Noodle Bar": "Noodle Bar" }
     },
     "Neon Locket": {
-        text: "A small locket flickers neon pink. Memories trapped inside.",
+        text: "A small locket glows neon pink, its surface humming with trapped memories. You feel its pulse echo in your mind.",
         choices: { "Return to Offworld Alley": "Offworld Alley" }
     }
 };
@@ -104,7 +104,9 @@ function typeWriter(text, speed = 25, callback) {
         if (i < text.length) {
             paragraph.innerText += text.charAt(i);
             i++;
-            setTimeout(type, speed);
+            let delay = speed;
+            if (".!?".includes(text.charAt(i))) delay += 100; // small pause after sentences
+            setTimeout(type, delay);
         } else if (callback) {
             callback();
         }
@@ -127,11 +129,11 @@ function createContinueButton(label, destination) {
 // ------------------- Event Functions -------------------
 function droneEncounter() {
     clearScreen();
-    typeWriter("The drone hums, hesitating. Its lens scans your soul.", 25, () => {
+    typeWriter("The drone hums, hesitating. Its lens scans your soul, waiting for a sign.", 25, () => {
         const hackBtn = document.createElement("button");
         hackBtn.innerText = "Hack Drone";
         hackBtn.onclick = () => {
-            typeWriter("You uncover forbidden files. Identity shakes.", 25, () => {
+            typeWriter("You uncover forbidden files. Identity trembles under the weight of knowledge.", 25, () => {
                 player.memories.droneHack = true;
                 adjustIdentity(-1);
                 pickup("Encrypted File");
@@ -143,7 +145,7 @@ function droneEncounter() {
         const destroyBtn = document.createElement("button");
         destroyBtn.innerText = "Destroy Drone";
         destroyBtn.onclick = () => {
-            typeWriter("Sparks fly. Moral score decreases.", 25, () => {
+            typeWriter("Sparks fly and metal screams. Moral score decreases.", 25, () => {
                 adjustMoral(-1);
                 createContinueButton("Return to Neon Alley", "Neon Alley");
             });
@@ -158,14 +160,14 @@ function memoryTrigger() {
     adjustIdentity(-1);
     pickup("Red Dream Fragment");
 
-    typeWriter("The word 'red' echoes inside. Memory integrity shaken.", 25, () => {
+    typeWriter("The word 'red' echoes inside. Memory integrity shakes.", 25, () => {
         createContinueButton("Return", "Noodle Bar");
     });
 }
 
 function holoMemory() {
     clearScreen();
-    typeWriter("A hologram flickers: a future that might never exist.", 25, () => {
+    typeWriter("A hologram flickers: a possible future, shimmering in fractured light.", 25, () => {
         const interveneBtn = document.createElement("button");
         interveneBtn.innerText = "Intervene";
         interveneBtn.onclick = () => {
@@ -180,7 +182,7 @@ function holoMemory() {
         const watchBtn = document.createElement("button");
         watchBtn.innerText = "Watch Silently";
         watchBtn.onclick = () => {
-            typeWriter("You watch. Moral drifts down.", 25, () => {
+            typeWriter("You watch. Moral drifts down with the neon shadows.", 25, () => {
                 adjustMoral(-1);
                 createContinueButton("Return to Offworld Alley", "Offworld Alley");
             });
@@ -191,7 +193,7 @@ function holoMemory() {
 
 function serverRoom() {
     clearScreen();
-    typeWriter("You infiltrate the server room. Data flashes.", 25, () => {
+    typeWriter("You infiltrate the server room. Data flashes across holo-screens in chaotic rhythm.", 25, () => {
         adjustMoral(1); adjustIdentity(-1);
         pickup("Offworld Data Key");
         createContinueButton("Exit HQ", "Corporate HQ");
@@ -200,7 +202,7 @@ function serverRoom() {
 
 function confrontReplicant() {
     clearScreen();
-    typeWriter("Replicant confronts you. Baseline test begins.", 25, () => {
+    typeWriter("The Replicant confronts you. Baseline test begins, your pulse quickens.", 25, () => {
         adjustMoral(1); adjustIdentity(-2);
         createContinueButton("Finish Encounter", "ENDING");
     });
