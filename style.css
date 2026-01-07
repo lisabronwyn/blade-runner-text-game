@@ -1,103 +1,63 @@
-/* ---------------------- Reset ---------------------- */
+/* Basic reset */
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-/* ---------------------- Body & Background ---------------------- */
+/* Page */
 html, body {
-    min-height: 100%;
-    font-family: 'Share Tech Mono', monospace; /* elegant cyberpunk */
-    font-size: 1rem;
-    line-height: 1.6;
-    background: black;
-    color: #0ff;
-    overflow: auto; /* mobile scroll */
+  height: 100%;
+  font-family: 'Courier New', monospace;
+  background: black;
+  color: #0ff;
 }
 
-/* Background image layer */
-#background {
-    position: fixed;
-    inset: 0;
-    background: url("blade-runner-bg.jpg") center / cover no-repeat;
-    filter: blur(3px) brightness(0.6);
-    z-index: 0;
-    pointer-events: none; /* allow clicks on container */
-}
-
-/* ---------------------- Game Container ---------------------- */
+/* Game container */
 #game-container {
-    position: relative;
-    z-index: 1; /* above background */
-    width: 95%;
-    max-width: 600px;
-    margin: 20px auto;
-    padding: 16px;
-    background: rgba(0, 0, 0, 0.65);
-    border-radius: 10px;
-    box-shadow: 0 0 20px #0ff;
-    overflow-y: auto;
-    max-height: 90vh;
-    animation: neon-flicker 2s infinite;
+  width: 95%;
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 16px;
+  background: rgba(0,0,0,0.85); /* readable, no pseudo-elements */
+  border-radius: 10px;
+  box-shadow: 0 0 15px #0ff;
 }
 
-/* ---------------------- Output Text ---------------------- */
+/* Output text */
 #output {
-    white-space: pre-wrap;
-    word-break: break-word;
-    margin-bottom: 16px;
+  line-height: 1.6;
+  margin-bottom: 16px;
+  word-wrap: break-word;
 }
 
 #output p {
-    text-shadow: 0 0 4px #0ff, 0 0 8px #0ff; /* neon glow */
-    letter-spacing: 0.5px;
-    font-size: 1.05rem;
+  letter-spacing: 0.5px;
+  font-size: 1.05rem;
 }
 
-/* ---------------------- Pickup Items ---------------------- */
-.pickup {
-    color: #ff0;
-    font-weight: bold;
-    text-shadow: 0 0 8px #ff0, 0 0 12px #ff0;
-    letter-spacing: 1px;
-    margin: 8px 0;
-}
-
-/* ---------------------- Buttons ---------------------- */
+/* Buttons */
 button {
-    font-family: 'Share Tech Mono', monospace;
-    font-weight: bold;
-    font-size: 1rem;
-    background: rgba(0, 255, 255, 0.85);
-    color: #000;
-    border: 1px solid #0ff;
-    border-radius: 6px;
-    text-shadow: 0 0 3px #0ff;
-    margin: 6px 0;
-    padding: 14px;
-    width: 100%;
-    min-height: 44px; /* mobile tappable */
-    cursor: pointer;
-    transition: 0.2s all ease;
+  width: 100%;
+  margin: 6px 0;
+  padding: 14px;
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1px solid #0ff;
+  background: #0ff;
+  color: #000;
+  cursor: pointer;
+  min-height: 44px; /* mobile tap-friendly */
 }
 
-button:hover {
-    box-shadow: 0 0 15px #0ff, 0 0 25px #0ff;
-    transform: translateY(-1px);
+button:active {
+  transform: scale(0.98);
 }
 
-/* ---------------------- Status Bar ---------------------- */
+/* Status */
 #status {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.95rem;
-    color: #0ff;
-    text-shadow: 0 0 3px #0ff;
-    margin-top: 12px;
-}
-
-/* ---------------------- Flicker Animation ---------------------- */
-@keyframes neon-flicker {
-    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
-    20%, 22%, 24%, 55% { opacity: 0.85; }
+  margin-top: 12px;
+  font-size: 0.95rem;
 }
