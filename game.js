@@ -7,7 +7,7 @@ const player = {
     identityStability: 5
 };
 
-// ------------------- Locations & Events -------------------
+// ------------------- Locations -------------------
 const locations = {
     "Neon Alley": {
         text: "Rain slicks the pavement. Neon kanji reflects in puddles. Shadows move unseen.",
@@ -45,15 +45,8 @@ const locations = {
     },
     "Server Room": { text: "", choices: {} },
     "Confront Replicant": { text: "", choices: {} },
-    // Secret collectibles
-    "Tyrell Note": {
-        text: "A handwritten note from Tyrell Corporation: 'Truth is a luxury.'",
-        choices: { "Return to Noodle Bar": "Noodle Bar" }
-    },
-    "Neon Locket": {
-        text: "A small locket flickers neon pink. Memories trapped inside.",
-        choices: { "Return to Offworld Alley": "Offworld Alley" }
-    }
+    "Tyrell Note": { text: "A handwritten note from Tyrell Corporation: 'Truth is a luxury.'", choices: { "Return to Noodle Bar": "Noodle Bar" } },
+    "Neon Locket": { text: "A small locket flickers neon pink. Memories trapped inside.", choices: { "Return to Offworld Alley": "Offworld Alley" } }
 };
 
 // ------------------- DOM References -------------------
@@ -67,13 +60,8 @@ function clearScreen() {
     choicesDiv.innerHTML = "";
 }
 
-function adjustIdentity(amount) {
-    player.identityStability = Math.max(0, Math.min(10, player.identityStability + amount));
-}
-
-function adjustMoral(amount) {
-    player.moralScore += amount;
-}
+function adjustIdentity(amount) { player.identityStability = Math.max(0, Math.min(10, player.identityStability + amount)); }
+function adjustMoral(amount) { player.moralScore += amount; }
 
 function pickup(item) {
     if (!player.inventory.includes(item)) {
@@ -83,11 +71,9 @@ function pickup(item) {
     }
 }
 
-function updateStatus() {
-    statusDiv.innerText = `Identity: ${player.identityStability} | Moral: ${player.moralScore}`;
-}
+function updateStatus() { statusDiv.innerText = `Identity: ${player.identityStability} | Moral: ${player.moralScore}`; }
 
-// ------------------- Secret paths -------------------
+// ------------------- Secret Paths -------------------
 function checkSecretPaths(location) {
     const secrets = [];
     if (location === "Noodle Bar" && player.memories.redDream && !player.inventory.includes("Tyrell Note")) {
@@ -99,15 +85,42 @@ function checkSecretPaths(location) {
     return secrets;
 }
 
+// ------------------- Typewriter -------------------
+function typeWriter(text, speed = 25, callback) {
+    let i = 0;
+    output.innerHTML = "";
+    function type() {
+        if (i < text.length) {
+            output.innerHTML += text.charAt(i);
+            i++;
+            setTimeout(type, speed);
+        } else if (callback) {
+            callback();
+        }
+    }
+    type();
+}
+
+// ------------------- Continue Button -------------------
+function createContinueButton(label, destination) {
+    const btn = document.createElement("button");
+    btn.innerText = label;
+    btn.onclick = () => {
+        if (destination === "ENDING") ending();
+        else showLocation(destination);
+    };
+    choicesDiv.innerHTML = "";
+    choicesDiv.appendChild(btn);
+}
+
 // ------------------- Event Functions -------------------
 function droneEncounter() {
     clearScreen();
-    output.innerHTML += "<p>The drone hums, hesitating. Its lens scans your soul.</p>";
-
+    typeWriter("The drone hums, hesitating. Its lens scans your soul.");
     const hackBtn = document.createElement("button");
     hackBtn.innerText = "Hack Drone";
     hackBtn.onclick = () => {
-        output.innerHTML += "<p>You uncover forbidden files. Identity shakes.</p>";
+        typeWriter("You uncover forbidden files. Identity shakes.");
         player.memories.droneHack = true;
         adjustIdentity(-1);
         pickup("Encrypted File");
@@ -118,7 +131,7 @@ function droneEncounter() {
     const destroyBtn = document.createElement("button");
     destroyBtn.innerText = "Destroy Drone";
     destroyBtn.onclick = () => {
-        output.innerHTML += "<p>Sparks fly. Moral score decreases.</p>";
+        typeWriter("Sparks fly. Moral score decreases.");
         adjustMoral(-1);
         createContinueButton("Return to Neon Alley", "Neon Alley");
     };
@@ -127,22 +140,20 @@ function droneEncounter() {
 
 function memoryTrigger() {
     clearScreen();
-    output.innerHTML += "<p>The word 'red' echoes inside. Memory integrity shaken.</p>";
+    typeWriter("The word 'red' echoes inside. Memory integrity shaken.");
     player.memories.redDream = true;
     adjustIdentity(-1);
     pickup("Red Dream Fragment");
-
     createContinueButton("Return", "Noodle Bar");
 }
 
 function holoMemory() {
     clearScreen();
-    output.innerHTML += "<p>A hologram flickers: a future that might never exist.</p>";
-
+    typeWriter("A hologram flickers: a future that might never exist.");
     const interveneBtn = document.createElement("button");
     interveneBtn.innerText = "Intervene";
     interveneBtn.onclick = () => {
-        output.innerHTML += "<p>You alter the memory. Moral rises, identity falters.</p>";
+        typeWriter("You alter the memory. Moral rises, identity falters.");
         adjustMoral(1); adjustIdentity(-1);
         pickup("Altered Holo Memory");
         createContinueButton("Return to Offworld Alley", "Offworld Alley");
@@ -152,7 +163,7 @@ function holoMemory() {
     const watchBtn = document.createElement("button");
     watchBtn.innerText = "Watch Silently";
     watchBtn.onclick = () => {
-        output.innerHTML += "<p>You watch. Moral drifts down.</p>";
+        typeWriter("You watch. Moral drifts down.");
         adjustMoral(-1);
         createContinueButton("Return to Offworld Alley", "Offworld Alley");
     };
@@ -161,77 +172,50 @@ function holoMemory() {
 
 function serverRoom() {
     clearScreen();
-    output.innerHTML += "<p>You infiltrate the server room. Data flashes.</p>";
+    typeWriter("You infiltrate the server room. Data flashes.");
     adjustMoral(1); adjustIdentity(-1);
     pickup("Offworld Data Key");
-
     createContinueButton("Exit HQ", "Corporate HQ");
 }
 
 function confrontReplicant() {
     clearScreen();
-    output.innerHTML += "<p>Replicant confronts you. Baseline test begins.</p>";
+    typeWriter("Replicant confronts you. Baseline test begins.");
     adjustMoral(1); adjustIdentity(-2);
-
     createContinueButton("Finish Encounter", "ENDING");
 }
 
-// ------------------- Ending Function -------------------
+// ------------------- Ending -------------------
 function ending() {
     clearScreen();
     let endText = "<p>The neon rain reflects your choices.</p>";
-
-    if (player.identityStability <= 0) {
-        endText += "<p>Your mind collapses. Baseline failed. Darkness wins.</p>";
-    } else if (player.moralScore >= 3) {
-        endText += "<p>You preserved morality. Memories intact. Identity stable.</p>";
-    } else if (player.moralScore <= -3) {
-        endText += "<p>Moral drift consumes you. Memories corrupted. Fade into neon shadow.</p>";
-    } else if (player.inventory.includes("Tyrell Note") && player.inventory.includes("Neon Locket") && player.inventory.includes("Hidden Memory")) {
+    if (player.identityStability <= 0) endText += "<p>Your mind collapses. Baseline failed. Darkness wins.</p>";
+    else if (player.moralScore >= 3) endText += "<p>You preserved morality. Memories intact. Identity stable.</p>";
+    else if (player.moralScore <= -3) endText += "<p>Moral drift consumes you. Memories corrupted. Fade into neon shadow.</p>";
+    else if (player.inventory.includes("Tyrell Note") && player.inventory.includes("Neon Locket") && player.inventory.includes("Hidden Memory")) 
         endText += "<p style='color:#ff77ff;'>Secret Ending: You uncover the lost memories of Rachael Tyrell herself. Neon rain bathes your identity. Truth transcends morality.</p>";
-    } else {
-        endText += "<p>Ambiguous path. Neon flickers. Identity and morality in balance.</p>";
-    }
-
-    output.innerHTML = endText;
+    else endText += "<p>Ambiguous path. Neon flickers. Identity and morality in balance.</p>";
+    typeWriter(endText);
     choicesDiv.innerHTML = "";
     statusDiv.innerHTML = "";
-}
-
-// ------------------- Manual Continue Button -------------------
-function createContinueButton(label, destination) {
-    const btn = document.createElement("button");
-    btn.innerText = label;
-    btn.onclick = () => {
-        if (destination === "ENDING") {
-            ending();
-        } else {
-            showLocation(destination);
-        }
-    };
-    choicesDiv.innerHTML = "";
-    choicesDiv.appendChild(btn);
 }
 
 // ------------------- Main Display -------------------
 function showLocation(location) {
     if (player.identityStability <= 0) return ending();
-
     player.location = location;
     const loc = locations[location];
     clearScreen();
 
     let text = loc.text;
-
-    // Secret memory path trigger
     if (location === "Offworld Alley" && player.memories.redDream && !player.inventory.includes("Hidden Memory")) {
         text += "<p style='color:#ff00ff;'>A hidden memory flickers, only visible to you.</p>";
         pickup("Hidden Memory");
     }
 
-    output.innerHTML += `<p>${text}</p>`;
+    typeWriter(text);
 
-    // Render normal choices
+    // Normal choices
     for (const [label, dest] of Object.entries(loc.choices)) {
         const btn = document.createElement("button");
         btn.innerText = label;
@@ -239,7 +223,7 @@ function showLocation(location) {
         choicesDiv.appendChild(btn);
     }
 
-    // Render secret choices
+    // Secret choices
     const secretChoices = checkSecretPaths(location);
     secretChoices.forEach(secret => {
         const btn = document.createElement("button");
