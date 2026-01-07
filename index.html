@@ -3,45 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <title>Blade Runner: Memory Drift</title>
-  
-  <!-- PyScript CSS -->
-  <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css">
-
-   <!-- PyScript JS -->
-  <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
-
-  <style>
-    body {
-      background: black;
-      color: #00ffcc;
-      font-family: monospace;
-      padding: 20px;
-    }
-    button {
-      margin: 6px;
-      background: transparent;
-      color: #00ffcc;
-      border: 1px solid #00ffcc;
-      padding: 8px;
-      cursor: pointer;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-  <h1>BLADE RUNNER: MEMORY DRIFT</h1>
-  <div id="output"></div>
-  <div id="choices"></div>
+  <div class="container">
+    <h1>BLADE RUNNER: MEMORY DRIFT</h1>
+    <div id="output" class="output"></div>
+    <div id="choices" class="choices"></div>
+    <div id="status" class="status"></div>
+  </div>
 
-  <!-- PY-CONFIG GOES HERE -->
-  <py-config>
-    [[fetch]]
-    files = ["game.py"]
-  </py-config>
-
-  <!-- PY-SCRIPT GOES AFTER CONFIG -->
-  <py-script src="game.py"></py-script>
-
+  <script src="game.js"></script>
 </body>
 </html>
