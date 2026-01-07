@@ -1,26 +1,42 @@
+/* ---------------------- Body & Background ---------------------- */
 html, body {
     height: 100%;
     margin: 0;
     padding: 0;
-    background-color: #000;
-    color: #0ff;
     font-family: 'Courier New', monospace;
-    display: block; /* Safari mobile fix */
+    display: block; /* fix mobile Safari flex issue */
+    overflow: hidden;
+    background: #000; /* fallback if image missing */
+    color: #0ff;
 }
 
+/* Full-screen background with blur */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: url('10.png') no-repeat center center;
+    background-size: cover;
+    filter: blur(3px) brightness(0.6); /* adjust blur/brightness */
+    z-index: -1;
+}
+
+/* ---------------------- Game Container ---------------------- */
 #game-container {
     width: 95%;
     max-width: 600px;
     margin: 20px auto;
     padding: 15px;
-    background-color: #000;
+    background-color: rgba(0, 0, 0, 0.65); /* semi-transparent box */
     border-radius: 10px;
-    box-shadow: 0 0 15px #0ff33c;
-    box-sizing: border-box;
+    box-shadow: 0 0 20px #0ff;
     overflow-y: auto;
-    max-height: 90vh; /* prevents content from disappearing on Safari */
+    max-height: 90vh;
+    box-sizing: border-box;
+    animation: flicker 2s infinite; /* subtle neon flicker */
 }
 
+/* ---------------------- Output Text ---------------------- */
 #output {
     overflow-wrap: break-word;
     word-wrap: break-word;
@@ -30,32 +46,44 @@ html, body {
     font-size: 1.05em;
 }
 
+#output p {
+    text-shadow: 0 0 6px #0ff; /* neon glow for paragraphs */
+}
+
+/* ---------------------- Pickup Items ---------------------- */
+.pickup {
+    color: #ff0;
+    font-weight: bold;
+    text-shadow: 0 0 12px #ff0; /* stronger glow for collectibles */
+}
+
+/* ---------------------- Buttons ---------------------- */
 button {
     display: block;
     width: 100%;
     margin: 5px 0;
     padding: 12px;
     font-size: 1em;
-    background-color: #0ff;
+    background-color: rgba(0, 255, 255, 0.8);
     color: #000;
-    border: none;
-    border-radius: 5px;
+    border-radius: 6px;
+    border: 1px solid #0ff;
     cursor: pointer;
-    min-height: 44px; /* mobile tappable */
+    text-shadow: 0 0 3px #0ff;
+    min-height: 44px; /* tappable on mobile */
 }
 
 button:hover {
-    box-shadow: 0 0 10px #0ff;
+    box-shadow: 0 0 20px #0ff;
 }
 
-.pickup {
-    color: #ff0;
-    font-weight: bold;
-    text-shadow: 0 0 8px #ff0;
-}
-
+/* ---------------------- Status Bar ---------------------- */
 #status {
     margin-top: 10px;
     font-size: 0.95em;
     color: #0ff;
 }
+
+/* ---------------------- Flicker Animation ---------------------- */
+@keyframes flicker {
+    0%, 19
