@@ -24,8 +24,6 @@ const locations = {
             "Leave quietly": "Neon Alley"
         }
     },
-    "Drone Encounter": { text: "", choices: {} },
-    "Memory Trigger": { text: "", choices: {} },
     "Offworld Alley": {
         text: "The alley is empty, silent except for the hum of flickering holo-ads. Fragments of memories shimmer across the wet walls.",
         choices: {
@@ -34,7 +32,6 @@ const locations = {
             "Enter Corporate HQ": "Corporate HQ"
         }
     },
-    "HoloMemory": { text: "", choices: {} },
     "Corporate HQ": {
         text: "Towering glass walls reflect the neon rain. Drones patrol silently, lenses scanning for anomalies.",
         choices: {
@@ -43,8 +40,6 @@ const locations = {
             "Return to Offworld Alley": "Offworld Alley"
         }
     },
-    "Server Room": { text: "", choices: {} },
-    "Confront Replicant": { text: "", choices: {} },
     "Tyrell Note": {
         text: "A handwritten note from Tyrell Corporation lies folded: 'Truth is a luxury, and memories are fragile.'",
         choices: { "Return to Noodle Bar": "Noodle Bar" }
@@ -82,18 +77,6 @@ function pickup(item) {
 
 function updateStatus() { statusDiv.innerText = `Identity: ${player.identityStability} | Moral: ${player.moralScore}`; }
 
-// ------------------- Secret Paths -------------------
-function checkSecretPaths(location) {
-    const secrets = [];
-    if (location === "Noodle Bar" && player.memories.redDream && !player.inventory.includes("Tyrell Note")) {
-        secrets.push({ text: "Read the hidden note behind the menu", dest: "Tyrell Note" });
-    }
-    if (location === "Offworld Alley" && player.inventory.includes("Hidden Memory") && !player.inventory.includes("Neon Locket")) {
-        secrets.push({ text: "Find the Neon Locket in the puddle", dest: "Neon Locket" });
-    }
-    return secrets;
-}
-
 // ------------------- Typewriter -------------------
 function typeWriter(text, speed = 25, callback) {
     let i = 0;
@@ -127,9 +110,87 @@ function createContinueButton(label, destination) {
 }
 
 // ------------------- Event Functions -------------------
-// droneEncounter(), memoryTrigger(), holoMemory(), serverRoom(), confrontReplicant()
-// (You can copy the same ones from previous full JS version — they all work)
+function droneEncounter() {
+    clearScreen();
+    typeWriter("The drone hums, hesitating. Its lens scans your soul, waiting for a sign.", 25, () => {
+        const hackBtn = document.createElement("button");
+        hackBtn.innerText = "Hack Drone";
+        hackBtn.onclick = () => {
+            typeWriter("You uncover forbidden files. Identity trembles under the weight of knowledge.", 25, () => {
+                player.memories.droneHack = true;
+                adjustIdentity(-1);
+                pickup("Encrypted File");
+                createContinueButton("Return to Neon Alley", "Neon Alley");
+            });
+        };
+        choicesDiv.appendChild(hackBtn);
 
+        const destroyBtn = document.createElement("button");
+        destroyBtn.innerText = "Destroy Drone";
+        destroyBtn.onclick = () => {
+            typeWriter("Sparks fly and metal screams. Moral score decreases.", 25, () => {
+                adjustMoral(-1);
+                createContinueButton("Return to Neon Alley", "Neon Alley");
+            });
+        };
+        choicesDiv.appendChild(destroyBtn);
+    });
+}
+
+function memoryTrigger() {
+    clearScreen();
+    player.memories.redDream = true;
+    adjustIdentity(-1);
+    pickup("Red Dream Fragment");
+    typeWriter("The word 'red' echoes inside. Memory integrity shakes.", 25, () => {
+        createContinueButton("Return", "Noodle Bar");
+    });
+}
+
+function holoMemory() {
+    clearScreen();
+    typeWriter("A hologram flickers: a possible future, shimmering in fractured light.", 25, () => {
+        const interveneBtn = document.createElement("button");
+        interveneBtn.innerText = "Intervene";
+        interveneBtn.onclick = () => {
+            typeWriter("You alter the memory. Moral rises, identity falters.", 25, () => {
+                adjustMoral(1); adjustIdentity(-1);
+                pickup("Altered Holo Memory");
+                createContinueButton("Return to Offworld Alley", "Offworld Alley");
+            });
+        };
+        choicesDiv.appendChild(interveneBtn);
+
+        const watchBtn = document.createElement("button");
+        watchBtn.innerText = "Watch Silently";
+        watchBtn.onclick = () => {
+            typeWriter("You watch. Moral drifts down with the neon shadows.", 25, () => {
+                adjustMoral(-1);
+                createContinueButton("Return to Offworld Alley", "Offworld Alley");
+            });
+        };
+        choicesDiv.appendChild(watchBtn);
+    });
+}
+
+function serverRoom() {
+    clearScreen();
+    typeWriter("You infiltrate the server room. Data flashes across holo-screens in chaotic rhythm.", 25, () => {
+        adjustMoral(1); adjustIdentity(-1);
+        pickup("Offworld Data Key");
+        createContinueButton("Exit HQ", "Corporate HQ");
+    });
+}
+
+function confrontReplicant() {
+    clearScreen();
+    typeWriter("The Replicant confronts you. Baseline test begins, your pulse quickens.", 25, () => {
+        adjustMoral(1); adjustIdentity(-2);
+        createContinueButton("Finish Encounter", "ENDING");
+    });
+}
+
+// ------------------- Ending -------------------
 function ending() {
     clearScreen();
     let endText = "The neon rain reflects your choices.";
@@ -183,6 +244,17 @@ function showLocation(location) {
     });
 
     updateStatus();
+}
+
+function checkSecretPaths(location) {
+    const secrets = [];
+    if (location === "Noodle Bar" && player.memories.redDream && !player.inventory.includes("Tyrell Note")) {
+        secrets.push({ text: "Read the hidden note behind the menu", dest: "Tyrell Note" });
+    }
+    if (location === "Offworld Alley" && player.inventory.includes("Hidden Memory") && !player.inventory.includes("Neon Locket")) {
+        secrets.push({ text: "Find the Neon Locket in the puddle", dest: "Neon Locket" });
+    }
+    return secrets;
 }
 
 function handleChoice(dest) {
