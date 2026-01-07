@@ -1,35 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BLADE RUNNER: MEMORY DRIFT</title>
-
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BLADE RUNNER: MEMORY DRIFT</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- Background layer (NOT pseudo-element) -->
-  <div id="background"></div>
+<main id="game-container">
+  <h1>BLADE RUNNER: MEMORY DRIFT</h1>
 
-  <main id="game-container">
-    <h1>BLADE RUNNER: MEMORY DRIFT</h1>
+  <div id="output">
+    <p>Rain slicks the pavement. Neon kanji reflects in puddles. Shadows move unseen.</p>
+  </div>
 
-    <div id="output">
-      <p>Rain slicks the pavement. Neon kanji reflects in puddles. Shadows move unseen.</p>
-    </div>
+  <div id="choices">
+    <button onclick="choose('noodle')">Enter the noodle bar</button>
+    <button onclick="choose('alley')">Step into the alley</button>
+  </div>
 
-    <div id="choices">
-      <button onclick="choose('noodle')">Enter the noodle bar</button>
-      <button onclick="choose('alley')">Step into the alley</button>
-    </div>
+  <div id="status">
+    Identity: <span id="identity">4</span> |
+    Morale: <span id="morale">3</span>
+  </div>
+</main>
 
-    <div id="status">
-      Identity: <span id="identity">4</span> |
-      Morale: <span id="morale">3</span>
-    </div>
-  </main>
-
-  <script src="game.js"></script>
+<script src="game.js"></script>
 </body>
 </html>
