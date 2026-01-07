@@ -14,5 +14,9 @@
     <div id="status"></div>
 </div>
 <script src="game.js"></script>
+<script>
+// Safari mobile reflow hack
+setTimeout(() => { window.scrollTo(0, 1); }, 100);
+</script>
 </body>
 </html>
