@@ -3,7 +3,7 @@ const player = {
     location: "Neon Alley",
     inventory: [],
     memories: {},
-    moralScore: 0,
+    moraleScore: 0,
     identityStability: 5
 };
 
@@ -71,8 +71,8 @@ function adjustIdentity(amount) {
     player.identityStability = Math.max(0, Math.min(10, player.identityStability + amount));
 }
 
-function adjustMoral(amount) {
-    player.moralScore += amount;
+function adjustMorale(amount) {
+    player.moraleScore += amount;
 }
 
 function pickup(item) {
@@ -84,7 +84,7 @@ function pickup(item) {
 }
 
 function updateStatus() {
-    statusDiv.innerText = `Identity: ${player.identityStability} | Moral: ${player.moralScore}`;
+    statusDiv.innerText = `Identity: ${player.identityStability} | Morale: ${player.moraleScore}`;
 }
 
 // ------------------- Secret paths -------------------
@@ -118,8 +118,8 @@ function droneEncounter() {
     const destroyBtn = document.createElement("button");
     destroyBtn.innerText = "Destroy Drone";
     destroyBtn.onclick = () => {
-        output.innerHTML += "<p>Sparks fly. Moral score decreases.</p>";
-        adjustMoral(-1);
+        output.innerHTML += "<p>Sparks fly. Morale score decreases.</p>";
+        adjustMorale(-1);
         setTimeout(() => showLocation("Neon Alley"), 500);
     };
     choicesDiv.appendChild(destroyBtn);
@@ -146,7 +146,7 @@ function holoMemory() {
     interveneBtn.innerText = "Intervene";
     interveneBtn.onclick = () => {
         output.innerHTML += "<p>You alter the memory. Moral rises, identity falters.</p>";
-        adjustMoral(1); adjustIdentity(-1);
+        adjustMorale(1); adjustIdentity(-1);
         pickup("Altered Holo Memory");
         setTimeout(() => showLocation("Offworld Alley"), 500);
     };
@@ -155,8 +155,8 @@ function holoMemory() {
     const watchBtn = document.createElement("button");
     watchBtn.innerText = "Watch Silently";
     watchBtn.onclick = () => {
-        output.innerHTML += "<p>You watch. Moral drifts down.</p>";
-        adjustMoral(-1);
+        output.innerHTML += "<p>You watch. Morale drifts down.</p>";
+        adjustMorale(-1);
         setTimeout(() => showLocation("Offworld Alley"), 500);
     };
     choicesDiv.appendChild(watchBtn);
@@ -165,7 +165,7 @@ function holoMemory() {
 function serverRoom() {
     clearScreen();
     output.innerHTML += "<p>You infiltrate the server room. Data flashes.</p>";
-    adjustMoral(1); adjustIdentity(-1);
+    adjustMorale(1); adjustIdentity(-1);
     pickup("Offworld Data Key");
 
     const exitBtn = document.createElement("button");
@@ -177,7 +177,7 @@ function serverRoom() {
 function confrontReplicant() {
     clearScreen();
     output.innerHTML += "<p>Replicant confronts you. Baseline test begins.</p>";
-    adjustMoral(1); adjustIdentity(-2);
+    adjustMorale(1); adjustIdentity(-2);
 
     const finishBtn = document.createElement("button");
     finishBtn.innerText = "Finish Encounter";
@@ -192,10 +192,10 @@ function ending() {
 
     if (player.identityStability <= 0) {
         endText += "<p>Your mind collapses. Baseline failed. Darkness wins.</p>";
-    } else if (player.moralScore >= 3) {
+    } else if (player.moraleScore >= 3) {
         endText += "<p>You preserved morality. Memories intact. Identity stable.</p>";
-    } else if (player.moralScore <= -3) {
-        endText += "<p>Moral drift consumes you. Memories corrupted. Fade into neon shadow.</p>";
+    } else if (player.moraleScore <= -3) {
+        endText += "<p>Morale drift consumes you. Memories corrupted. Fade into neon shadow.</p>";
     } else if (player.inventory.includes("Tyrell Note") && player.inventory.includes("Neon Locket") && player.inventory.includes("Hidden Memory")) {
         endText += "<p style='color:#ff77ff;'>Secret Ending: You uncover the lost memories of Rachael Tyrell herself. Neon rain bathes your identity. Truth transcends morality.</p>";
     } else {
