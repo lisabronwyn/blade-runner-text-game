@@ -15,14 +15,16 @@ body::before {
     content: "";
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: url('10.png') no-repeat center center;
+    background: url('blade-runner-bg.jpg') no-repeat center center;
     background-size: cover;
     filter: blur(3px) brightness(0.6); /* adjust blur/brightness */
-    z-index: -1;
+    z-index: -1; /* must stay behind */
 }
 
 /* ---------------------- Game Container ---------------------- */
 #game-container {
+    position: relative;   /* required for z-index */
+    z-index: 1;           /* ensures buttons are clickable above background */
     width: 95%;
     max-width: 600px;
     margin: 20px auto;
@@ -86,4 +88,6 @@ button:hover {
 
 /* ---------------------- Flicker Animation ---------------------- */
 @keyframes flicker {
-    0%, 19
+    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
+    20%, 22%, 24%, 55% { opacity: 0.85; }
+}
