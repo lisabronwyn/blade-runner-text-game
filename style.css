@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  background: radial-gradient(circle at top, #000000, #010101, #050505);
+  background: radial-gradient(circle at top, #0a0a0a, #05050f, #0f0012);
   color: #00ffcc;
   font-family: "Courier New", monospace;
   display: flex;
@@ -10,25 +10,30 @@ body {
 }
 
 .container {
-  width: 700px;
-  padding: 20px;
+  width: 720px;
+  padding: 25px;
   border: 2px solid #00ffcc;
-  border-radius: 12px;
-  background: rgba(0, 0, 0, 0.8);
-  box-shadow: 0 0 40px #00ffcc;
+  border-radius: 15px;
+  background: rgba(0, 0, 0, 0.85);
+  box-shadow: 0 0 50px #00ffcc, 0 0 100px #ff00ff inset;
+  text-shadow: 0 0 6px #00ffcc, 0 0 12px #ff00ff;
 }
 
 h1 {
   text-align: center;
-  font-size: 1.8em;
+  font-size: 2em;
   margin-bottom: 20px;
-  text-shadow: 0 0 10px #00ffcc;
+  text-shadow: 0 0 12px #00ffcc, 0 0 20px #ff00ff;
+  letter-spacing: 2px;
 }
 
 .output {
-  min-height: 250px;
+  min-height: 300px;
   line-height: 1.6em;
   font-size: 1.1em;
+  color: #00ffcc;
+  text-shadow: 0 0 4px #00ffcc, 0 0 8px #ff00ff;
+  animation: neonGlow 2s ease-in-out infinite alternate;
 }
 
 .choices {
@@ -42,22 +47,32 @@ button {
   background: transparent;
   color: #00ffcc;
   border: 1px solid #00ffcc;
-  padding: 8px 12px;
+  padding: 8px 14px;
   cursor: pointer;
-  border-radius: 5px;
+  border-radius: 6px;
   font-family: monospace;
-  transition: 0.2s all;
+  font-weight: bold;
+  text-shadow: 0 0 2px #00ffcc;
+  transition: 0.3s all;
 }
 
 button:hover {
-  background: #00ffcc;
-  color: black;
-  box-shadow: 0 0 8px #00ffcc;
+  background: #ff00ff;
+  color: #000;
+  box-shadow: 0 0 15px #00ffcc, 0 0 20px #ff00ff;
 }
 
 .status {
   margin-top: 15px;
-  font-size: 0.9em;
+  font-size: 0.95em;
   color: #ff00ff;
   text-align: right;
+  letter-spacing: 1px;
+}
+
+/* Neon flicker effect */
+@keyframes neonGlow {
+  0% { text-shadow: 0 0 2px #00ffcc, 0 0 4px #ff00ff; }
+  50% { text-shadow: 0 0 6px #00ffcc, 0 0 10px #ff00ff; }
+  100% { text-shadow: 0 0 4px #00ffcc, 0 0 8px #ff00ff; }
 }
