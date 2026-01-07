@@ -11,13 +11,17 @@ body {
 }
 
 #game-container {
-    width: 95%;
-    max-width: 600px;
-    margin-top: 40px;
-    padding: 20px;
+    width: 95%;             /* flexible width for mobile */
+    max-width: 600px;       /* keeps it readable on desktop */
+    margin: 40px auto 20px auto;
+    padding: 15px;
     background-color: #000;
     border-radius: 10px;
-    box-shadow: 0 0 20px #0ff33c;
+    box-shadow: 0 0 15px #0ff33c;
+    box-sizing: border-box;
+    overflow-y: auto;           /* scroll if text exceeds height */
+    -webkit-overflow-scrolling: touch; /* smooth scrolling on iOS */
+    max-height: 95vh;           /* keeps container inside screen */
 }
 
 #output {
@@ -26,13 +30,14 @@ body {
     white-space: pre-wrap;
     line-height: 1.6em;
     margin-bottom: 20px;
+    font-size: 1.05em;          /* slightly bigger for mobile readability */
 }
 
 button {
     display: block;
     width: 100%;
     margin: 5px 0;
-    padding: 10px;
+    padding: 12px;
     font-size: 1em;
     background-color: #0ff;
     color: #000;
@@ -40,6 +45,7 @@ button {
     border-radius: 5px;
     cursor: pointer;
     text-align: center;
+    min-height: 44px;            /* ensures buttons are tappable on mobile */
 }
 
 button:hover {
