@@ -10,7 +10,7 @@ const player = {
 // ------------------- Locations -------------------
 const locations = {
     "Neon Alley": {
-        text: "Rain slicks the pavement. Neon kanji reflects in puddles. Shadows move unseen.",
+        text: "<p>Rain slicks the pavement. Neon kanji reflects in puddles. Shadows move unseen.</p>",
         choices: {
             "Enter the Noodle Bar": "Noodle Bar",
             "Inspect the Drone": "Drone Encounter",
@@ -18,7 +18,7 @@ const locations = {
         }
     },
     "Noodle Bar": {
-        text: "Steam fogs the windows. The cook avoids your gaze.",
+        text: "<p>Steam fogs the windows. The cook avoids your gaze.</p>",
         choices: {
             "Ask about the Red Dream": "Memory Trigger",
             "Leave quietly": "Neon Alley"
@@ -27,7 +27,7 @@ const locations = {
     "Drone Encounter": { text: "", choices: {} },
     "Memory Trigger": { text: "", choices: {} },
     "Offworld Alley": {
-        text: "Empty and silent. Flickering holo-ads show fragmented memories.",
+        text: "<p>Empty and silent. Flickering holo-ads show fragmented memories.</p>",
         choices: {
             "Investigate the Hologram": "HoloMemory",
             "Return to Neon Alley": "Neon Alley",
@@ -36,7 +36,7 @@ const locations = {
     },
     "HoloMemory": { text: "", choices: {} },
     "Corporate HQ": {
-        text: "Towering glass walls reflect neon rain. Drones patrol silently.",
+        text: "<p>Towering glass walls reflect neon rain. Drones patrol silently.</p>",
         choices: {
             "Sneak into Server Room": "Server Room",
             "Confront the Replicant": "Confront Replicant",
@@ -45,8 +45,14 @@ const locations = {
     },
     "Server Room": { text: "", choices: {} },
     "Confront Replicant": { text: "", choices: {} },
-    "Tyrell Note": { text: "A handwritten note from Tyrell Corporation: 'Truth is a luxury.'", choices: { "Return to Noodle Bar": "Noodle Bar" } },
-    "Neon Locket": { text: "A small locket flickers neon pink. Memories trapped inside.", choices: { "Return to Offworld Alley": "Offworld Alley" } }
+    "Tyrell Note": {
+        text: "<p>A handwritten note from Tyrell Corporation: 'Truth is a luxury.'</p>",
+        choices: { "Return to Noodle Bar": "Noodle Bar" }
+    },
+    "Neon Locket": {
+        text: "<p>A small locket flickers neon pink. Memories trapped inside.</p>",
+        choices: { "Return to Offworld Alley": "Offworld Alley" }
+    }
 };
 
 // ------------------- DOM References -------------------
@@ -88,7 +94,7 @@ function checkSecretPaths(location) {
 // ------------------- Typewriter -------------------
 function typeWriter(text, speed = 25, callback) {
     let i = 0;
-    output.innerHTML = "";
+    output.innerHTML += ""; // Ensure cleared only at start
     function type() {
         if (i < text.length) {
             output.innerHTML += text.charAt(i);
@@ -116,73 +122,83 @@ function createContinueButton(label, destination) {
 // ------------------- Event Functions -------------------
 function droneEncounter() {
     clearScreen();
-    typeWriter("The drone hums, hesitating. Its lens scans your soul.");
-    const hackBtn = document.createElement("button");
-    hackBtn.innerText = "Hack Drone";
-    hackBtn.onclick = () => {
-        typeWriter("You uncover forbidden files. Identity shakes.");
-        player.memories.droneHack = true;
-        adjustIdentity(-1);
-        pickup("Encrypted File");
-        createContinueButton("Return to Neon Alley", "Neon Alley");
-    };
-    choicesDiv.appendChild(hackBtn);
+    typeWriter("<p>The drone hums, hesitating. Its lens scans your soul.</p>", 25, () => {
+        const hackBtn = document.createElement("button");
+        hackBtn.innerText = "Hack Drone";
+        hackBtn.onclick = () => {
+            typeWriter("<p>You uncover forbidden files. Identity shakes.</p>", 25, () => {
+                player.memories.droneHack = true;
+                adjustIdentity(-1);
+                pickup("Encrypted File");
+                createContinueButton("Return to Neon Alley", "Neon Alley");
+            });
+        };
+        choicesDiv.appendChild(hackBtn);
 
-    const destroyBtn = document.createElement("button");
-    destroyBtn.innerText = "Destroy Drone";
-    destroyBtn.onclick = () => {
-        typeWriter("Sparks fly. Moral score decreases.");
-        adjustMoral(-1);
-        createContinueButton("Return to Neon Alley", "Neon Alley");
-    };
-    choicesDiv.appendChild(destroyBtn);
+        const destroyBtn = document.createElement("button");
+        destroyBtn.innerText = "Destroy Drone";
+        destroyBtn.onclick = () => {
+            typeWriter("<p>Sparks fly. Moral score decreases.</p>", 25, () => {
+                adjustMoral(-1);
+                createContinueButton("Return to Neon Alley", "Neon Alley");
+            });
+        };
+        choicesDiv.appendChild(destroyBtn);
+    });
 }
 
 function memoryTrigger() {
     clearScreen();
-    typeWriter("The word 'red' echoes inside. Memory integrity shaken.");
     player.memories.redDream = true;
     adjustIdentity(-1);
     pickup("Red Dream Fragment");
-    createContinueButton("Return", "Noodle Bar");
+
+    typeWriter("<p>The word 'red' echoes inside. Memory integrity shaken.</p>", 25, () => {
+        createContinueButton("Return", "Noodle Bar");
+    });
 }
 
 function holoMemory() {
     clearScreen();
-    typeWriter("A hologram flickers: a future that might never exist.");
-    const interveneBtn = document.createElement("button");
-    interveneBtn.innerText = "Intervene";
-    interveneBtn.onclick = () => {
-        typeWriter("You alter the memory. Moral rises, identity falters.");
-        adjustMoral(1); adjustIdentity(-1);
-        pickup("Altered Holo Memory");
-        createContinueButton("Return to Offworld Alley", "Offworld Alley");
-    };
-    choicesDiv.appendChild(interveneBtn);
+    typeWriter("<p>A hologram flickers: a future that might never exist.</p>", 25, () => {
+        const interveneBtn = document.createElement("button");
+        interveneBtn.innerText = "Intervene";
+        interveneBtn.onclick = () => {
+            typeWriter("<p>You alter the memory. Moral rises, identity falters.</p>", 25, () => {
+                adjustMoral(1); adjustIdentity(-1);
+                pickup("Altered Holo Memory");
+                createContinueButton("Return to Offworld Alley", "Offworld Alley");
+            });
+        };
+        choicesDiv.appendChild(interveneBtn);
 
-    const watchBtn = document.createElement("button");
-    watchBtn.innerText = "Watch Silently";
-    watchBtn.onclick = () => {
-        typeWriter("You watch. Moral drifts down.");
-        adjustMoral(-1);
-        createContinueButton("Return to Offworld Alley", "Offworld Alley");
-    };
-    choicesDiv.appendChild(watchBtn);
+        const watchBtn = document.createElement("button");
+        watchBtn.innerText = "Watch Silently";
+        watchBtn.onclick = () => {
+            typeWriter("<p>You watch. Moral drifts down.</p>", 25, () => {
+                adjustMoral(-1);
+                createContinueButton("Return to Offworld Alley", "Offworld Alley");
+            });
+        };
+        choicesDiv.appendChild(watchBtn);
+    });
 }
 
 function serverRoom() {
     clearScreen();
-    typeWriter("You infiltrate the server room. Data flashes.");
-    adjustMoral(1); adjustIdentity(-1);
-    pickup("Offworld Data Key");
-    createContinueButton("Exit HQ", "Corporate HQ");
+    typeWriter("<p>You infiltrate the server room. Data flashes.</p>", 25, () => {
+        adjustMoral(1); adjustIdentity(-1);
+        pickup("Offworld Data Key");
+        createContinueButton("Exit HQ", "Corporate HQ");
+    });
 }
 
 function confrontReplicant() {
     clearScreen();
-    typeWriter("Replicant confronts you. Baseline test begins.");
-    adjustMoral(1); adjustIdentity(-2);
-    createContinueButton("Finish Encounter", "ENDING");
+    typeWriter("<p>Replicant confronts you. Baseline test begins.</p>", 25, () => {
+        adjustMoral(1); adjustIdentity(-2);
+        createContinueButton("Finish Encounter", "ENDING");
+    });
 }
 
 // ------------------- Ending -------------------
@@ -192,10 +208,11 @@ function ending() {
     if (player.identityStability <= 0) endText += "<p>Your mind collapses. Baseline failed. Darkness wins.</p>";
     else if (player.moralScore >= 3) endText += "<p>You preserved morality. Memories intact. Identity stable.</p>";
     else if (player.moralScore <= -3) endText += "<p>Moral drift consumes you. Memories corrupted. Fade into neon shadow.</p>";
-    else if (player.inventory.includes("Tyrell Note") && player.inventory.includes("Neon Locket") && player.inventory.includes("Hidden Memory")) 
+    else if (player.inventory.includes("Tyrell Note") && player.inventory.includes("Neon Locket") && player.inventory.includes("Hidden Memory"))
         endText += "<p style='color:#ff77ff;'>Secret Ending: You uncover the lost memories of Rachael Tyrell herself. Neon rain bathes your identity. Truth transcends morality.</p>";
     else endText += "<p>Ambiguous path. Neon flickers. Identity and morality in balance.</p>";
-    typeWriter(endText);
+
+    typeWriter(endText, 25);
     choicesDiv.innerHTML = "";
     statusDiv.innerHTML = "";
 }
@@ -208,12 +225,13 @@ function showLocation(location) {
     clearScreen();
 
     let text = loc.text;
+
     if (location === "Offworld Alley" && player.memories.redDream && !player.inventory.includes("Hidden Memory")) {
         text += "<p style='color:#ff00ff;'>A hidden memory flickers, only visible to you.</p>";
         pickup("Hidden Memory");
     }
 
-    typeWriter(text);
+    typeWriter(text, 25);
 
     // Normal choices
     for (const [label, dest] of Object.entries(loc.choices)) {
